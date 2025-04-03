@@ -2,19 +2,29 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 
 class Author(models.Model):
-    name = models.CharField(max_length=100) #first_name VARCHAR(100)
-    surname = models.CharField(max_length=100)
-    birth_date = models.DateField()
-    profile = models.URLField(max_length=255, null=True, blank=True)
-    is_deleted = models.BooleanField(default=False)
+    name = models.CharField(max_length=100, verbose_name="Имя") #first_name VARCHAR(100)
+    surname = models.CharField(max_length=100, verbose_name="Фамилия")
+    birth_date = models.DateField(verbose_name="Дата рождения")
+    profile = models.URLField(
+        max_length=255,
+        null=True,
+        blank=True,
+        verbose_name="Ссылка на соц.сети")
+    is_deleted = models.BooleanField(
+        default=False,
+        verbose_name="Удален",
+        help_text="если True- автор удален, если False-не удален")
     rating = models.FloatField(
         validators=[
             MinValueValidator(1),
             MaxValueValidator(10)
         ],
-        default=0.0
+        default=0.0, verbose_name="Рейтинг"
     )
-    deleted_at = models.DateTimeField(null=True, blank=True)
+    deleted_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name="Дата удаления автора")
 
 
     def __str__(self):
