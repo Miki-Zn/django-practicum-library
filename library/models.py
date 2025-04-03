@@ -29,14 +29,14 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
-# Наш senior посмотрел на модель, что мы создали и предложил внести некоторые правки по улучшению модели.
-#
-# В модель Book добавьте дополнительные поля для большей информации о книге:
-#
-# Краткое описание: TextField, может быть пустым
-# Жанр: CharField, макс. длина 50, выборы из ['Fiction', 'Non-Fiction', 'Science Fiction', 'Fantasy', 'Mystery', 'Biography']
-# Кол-во страниц: может быть пустым, максимальное кол-во - 10000
-# Примените изменения в модели, попробуйте создать записи, не указывая некоторые поля. Обратите внимание на то, как отрабатывает система.
+class Publisher(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=255, null=True)
+    city = models.CharField(max_length=100, null=True)
+    country = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
 
 class Book(models.Model):
     GENRE_CHOICES = [
@@ -60,6 +60,7 @@ class Book(models.Model):
         null=True,
         blank=True)
     public_date = models.DateField()
+    publisher = models.ForeignKey(Publisher, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
         return self.title
