@@ -50,7 +50,7 @@ class Book(models.Model):
     ]
     title = models.CharField(max_length=120)
     author = models.ForeignKey(Author, on_delete=models.PROTECT)
-    genre = models.CharField(max_length=50, choices=GENRE_CHOICES)
+    genre = models.CharField(max_length=50, choices=GENRE_CHOICES, default='Non-Fiction')
     description = models.TextField(null=True, blank=True)
     count_pages = models.PositiveSmallIntegerField( # 32000 symbols
         validators=[
