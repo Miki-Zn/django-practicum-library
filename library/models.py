@@ -39,8 +39,26 @@ class Publisher(models.Model):
         return self.name
 
 class Book(models.Model):
+    GENRE_CHOICES = [
+        ('Fiction','Fiction'),
+        ('Non-Fiction','Non-Fiction'),
+        ('Science Fiction','Science Fiction'),
+        ('Fantasy','Fantasy'),
+        ('Mystery','Mystery'),
+        ('Biography','Biography'),
+
+    ]
     title = models.CharField(max_length=120)
     author = models.ForeignKey(Author, on_delete=models.PROTECT)
+    genre = models.CharField(max_length=50, choices=GENRE_CHOICES, default='Non-Fiction')
+    description = models.TextField(null=True, blank=True)
+    count_pages = models.PositiveSmallIntegerField( # 32000 symbols
+        validators=[
+            MinValueValidator(1),
+            MaxValueValidator(10000)
+        ],
+        null=True,
+        blank=True)
     public_date = models.DateField()
     publisher = models.ForeignKey(Publisher, on_delete=models.PROTECT, null=True)
 
