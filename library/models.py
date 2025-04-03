@@ -29,10 +29,20 @@ class Author(models.Model):
     def __str__(self):
         return self.name
 
+class Publisher(models.Model):
+    name = models.CharField(max_length=100)
+    address = models.CharField(max_length=255, null=True)
+    city = models.CharField(max_length=100, null=True)
+    country = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
 class Book(models.Model):
     title = models.CharField(max_length=120)
     author = models.ForeignKey(Author, on_delete=models.PROTECT)
     public_date = models.DateField()
+    publisher = models.ForeignKey(Publisher, on_delete=models.PROTECT, null=True)
 
     def __str__(self):
         return self.title
