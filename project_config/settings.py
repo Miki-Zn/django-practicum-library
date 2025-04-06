@@ -12,8 +12,14 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from environ import Env
+import environ
+import pymysql
 
-env = Env()
+pymysql.install_as_MySQLdb()
+
+
+env = environ.Env()
+environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -27,9 +33,11 @@ env.read_env(BASE_DIR / '.env')
 SECRET_KEY = env("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool("DEBUG")
+DEBUG = env('DEBUG') == 'True'
 
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS")
+
+MYSQL = env('MYSQL') == 'True'
 
 
 # Application definition
@@ -42,10 +50,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # 3-rd party
 
     # local
-    'library.apps.LibraryConfig',
+    'library',
 ]
 
 MIDDLEWARE = [
@@ -81,7 +88,7 @@ WSGI_APPLICATION = 'project_config.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-if env.bool("USE_REMOTE_DB"):
+if MYSQL:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.mysql',
@@ -90,7 +97,7 @@ if env.bool("USE_REMOTE_DB"):
             'PASSWORD': env('DB_PASSWORD'),
             'HOST': env('DB_HOST'),
             'PORT': env('DB_PORT'),
-        },
+        }
     }
 else:
     DATABASES = {
